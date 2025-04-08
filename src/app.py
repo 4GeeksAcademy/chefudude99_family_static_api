@@ -63,10 +63,16 @@ def add_member():
     print(new_member_data)
     return jsonify(new_member)
 
-
 @app.route('/member/<int:id>', methods=['GET'])
-def call_member():
-    body = request.get_json()
+def get_member(id):
+    jackson_family.get_member(id)
+    return jsonify('Ok')
+
+    
+@app.route('/member/<int:id>', methods=['DELETE'])
+def delete_single_member(id):
+    jackson_family.delete_member(id)
+    return jsonify({"done": True}), 200
 
 
 # this only runs if `$ python src/app.py` is executed
