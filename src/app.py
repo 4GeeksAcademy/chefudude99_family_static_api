@@ -59,16 +59,35 @@ def add_member():
         'age': body['age'],
         'lucky_numbers': body['lucky_numbers']
     }
+    if 'id' not in body:
+        new_member_data = {
+            'id': jackson_family._generateId(),
+            'first_name': body['first_name'],
+            'last_name': jackson_family.last_name,
+            'age': body['age'],
+            'lucky_numbers': body['lucky_numbers']
+        }
+    else:
+        new_member_data = {
+            'id': body['id'],
+            'first_name': body['first_name'],
+            'last_name': jackson_family.last_name,
+            'age': body['age'],
+            'lucky_numbers': body['lucky_numbers']
+        }
+
     new_member = jackson_family.add_member(new_member_data)
     print(new_member_data)
     return jsonify(new_member)
 
+
 @app.route('/member/<int:id>', methods=['GET'])
 def get_member(id):
-    jackson_family.get_member(id)
-    return jsonify('Ok')
+    response = jackson_family.get_member(id)
+    if response is None:
+        return jsonify({'msg': 'Miembro no fue encontrado'}), 404
+    return jsonify(response)
 
-    
 @app.route('/member/<int:id>', methods=['DELETE'])
 def delete_single_member(id):
     jackson_family.delete_member(id)
